@@ -100,9 +100,9 @@ export const SearchClient = (props) => {
   const onSuggestionsFetchRequested = ({ value }) => {
 
     async function getInflowData(value) {
-      const response = await fetch(`https://cloudapi.inflowinventory.com/11b89fbf-18bc-4c00-bfff-cf416f56e1a0/customers?filter[smart]=${value}&include=addresses&count=15`, {
+      const response = await fetch(`/inflowapi/11b89fbf-18bc-4c00-bfff-cf416f56e1a0/customers?filter[smart]=${value}&include=addresses&count=15`, {
         method: "GET",
-        mode: "cors",
+       
         
         headers: {
           "Content-Type": "application/json",
