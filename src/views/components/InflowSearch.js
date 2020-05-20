@@ -101,10 +101,10 @@ export const SearchClient = (props) => {
 
     async function getInflowData(value) {
       const response = await fetch(`https://cloudapi.inflowinventory.com/11b89fbf-18bc-4c00-bfff-cf416f56e1a0/customers?filter[smart]=${value}&include=addresses&count=15`, {
-        method: "GET",
-       
+        method: "GET", 
         
         headers: {
+          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
           Authorization:
             "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",

@@ -32,7 +32,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Plugin = (props) => {
   const [ActiveTab, setActiveTab] = useState("InflowDetail")
-  const [inFlowAPI_URL] = useState("https://cloudapi.inflowinventory.com/11b89fbf-18bc-4c00-bfff-cf416f56e1a0/")
   const [frontData, setfrontData] = useState(props.frontData)
   const [frontContactData, setfrontContactData] = useState({})
   const [inflowCstData, setinflowCstData] = useState(props.custData)
@@ -58,29 +57,8 @@ const Plugin = (props) => {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    const FrontAPIToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsicHJpdmF0ZToqIiwic2hhcmVkOioiLCJwcm92aXNpb25pbmciXSwiaWF0IjoxNTgzMTI0NzE2LCJpc3MiOiJmcm9udCIsInN1YiI6ImpwbWQiLCJqdGkiOiI0NGMyYjgxOGNkMGQ2Y2NmIn0.wK8kzIPIZINy4G38-1pY9WANYAcFkCzw_MieJ93RrpY";
-
-     //Get Avatar
-     fetch(props.FrontContactData.avatar_url, {
-      method: "GET", // or 'PUT'
-      headers: {
-        Authorization: FrontAPIToken,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.blob();
-      })
-      .then((result) => {
-        const url = URL.createObjectURL(result);
-
-        setFrontAvatar(url);
-        return result;
-      });
     
-  }, [props.frontId, props.custData, props.FrontContactData])
+  }, [props.frontId, props.custData])
 
   
  
@@ -116,7 +94,7 @@ const Plugin = (props) => {
       autoClose: 3000,
     });
 
-    const submitInflowData = () => {
+    const submitInflowData = (custid) => {
     notifyInflowSubmit();
 
     fetch(`${inFlowAPI_URL}customers`, {

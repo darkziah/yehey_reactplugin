@@ -83,21 +83,21 @@ class Plugin extends React.Component {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
 
-    const { 
-      inFlowAPI_URL, 
+    const {
+      inFlowAPI_URL,
       customerId,
       inflowId,
-     } = this.state;
+    } = this.state;
 
     async function getInflowId(value) {
       const response = await fetch(`https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/getInflowId?frontId=${value}`, {});
       const json = await response.json();
-        console.log(json)
+      console.log(json)
 
-        const data = json[0].inflowId
-        
+      const data = json[0].inflowId
 
-       
+
+
       return json;
     }
 
@@ -108,8 +108,8 @@ class Plugin extends React.Component {
         this.setState({
           inflowId: result[0].inflowId,
         });
-        
-        console.log("custIdRes",result[0].inflowId)
+
+        console.log("custIdRes", result[0].inflowId)
         const InFlowId = result[0].inflowId;
         //Inflow Get Customer Detail
         fetch(
@@ -134,119 +134,119 @@ class Plugin extends React.Component {
             console.log("FrontAvatar", this.state.FrontAvatar);
           });
 
-            //Get Customer Orders
-            fetch(
-              `${inFlowAPI_URL}sales-orders?filter[customerId]=${InFlowId}&include=lines.product.defaultImage`,
-              {
-                method: "GET", // or 'PUT'
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization:
-                    "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
-                  Accept: "application/json;version=2020-01-30",
-                },
-              }
-            )
-              .then((result) => result.json())
-              .then((result) => {
-                this.setState({
-                  orderData: result,
-                });
-                console.log("orderData", this.state.orderData);
-              });
-      });
-    
-   
-
-          
-          //Fetch Front API Contact Data
-          fetch(
-            `https://api2.frontapp.com/contacts/${this.state.frontData.recipient.contact.id}`,
-            {
-              method: "GET", // or 'PUT'
-              headers: {
-                Authorization: this.state.FrontAPIToken,
-              },
-            }
-          )
-            .then((result) => result.json())
-            .then((result) => {
-              console.log("frontContactData", result);
-              this.setState({
-                frontContactData: result,
-              });
-
-              //Get Avatar
-              fetch(result.avatar_url, {
-                method: "GET", // or 'PUT'
-                headers: {
-                  Authorization: this.state.FrontAPIToken,
-                },
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                  }
-                  return response.blob();
-                })
-                .then((result) => {
-                  const url = URL.createObjectURL(result);
-
-                  this.setState({
-                    FrontAvatar: url,
-                  });
-                  return result;
-                });
+        //Get Customer Orders
+        fetch(
+          `${inFlowAPI_URL}sales-orders?filter[customerId]=${InFlowId}&include=lines.product.defaultImage`,
+          {
+            method: "GET", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
+              Accept: "application/json;version=2020-01-30",
+            },
+          }
+        )
+          .then((result) => result.json())
+          .then((result) => {
+            this.setState({
+              orderData: result,
             });
-          
+            console.log("orderData", this.state.orderData);
+          });
+      });
 
-        
-  
+
+
+
+    //Fetch Front API Contact Data
+    fetch(
+      `https://api2.frontapp.com/contacts/${this.state.frontData.recipient.contact.id}`,
+      {
+        method: "GET", // or 'PUT'
+        headers: {
+          Authorization: this.state.FrontAPIToken,
+        },
+      }
+    )
+      .then((result) => result.json())
+      .then((result) => {
+        console.log("frontContactData", result);
+        this.setState({
+          frontContactData: result,
+        });
+
+        //Get Avatar
+        fetch(result.avatar_url, {
+          method: "GET", // or 'PUT'
+          headers: {
+            Authorization: this.state.FrontAPIToken,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.blob();
+          })
+          .then((result) => {
+            const url = URL.createObjectURL(result);
+
+            this.setState({
+              FrontAvatar: url,
+            });
+            return result;
+          });
+      });
+
+
+
+
   }
 
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     if (this.props.frontData.recipient.handle !== prevProps.frontData.recipient.handle) {
-      const { 
-        inFlowAPI_URL, 
+      const {
+        inFlowAPI_URL,
         customerId,
         inflowId,
-       } = this.state;
+      } = this.state;
 
-       console.log('props', this.props.frontData.recipient.handle)
-       console.log('prevprops', prevProps.frontData.recipient.handle)
+      console.log('props', this.props.frontData.recipient.handle)
+      console.log('prevprops', prevProps.frontData.recipient.handle)
 
-    fetch(`https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/getInflowId?frontId=${this.state.frontData.recipient.handle}`, {})
-    .then((res) => res.json())
-    .then((result) => {
-      this.setState({
-        inflowId: result[0].inflowId,
-      });
-      
-      console.log("custIdRes",result[0].inflowId)
-      const InFlowId = result[0].inflowId;
-      //Inflow Get Customer Detail
-      fetch(
-        `${inFlowAPI_URL}customers/${InFlowId}?include=addresses&include=pricingScheme&include=defaultLocation&include=taxingScheme&include=defaultPaymentTerms`,
-        {
-          method: "GET", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
-            Accept: "application/json;version=2020-01-30",
-          },
-        }
-      )
+      fetch(`https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/getInflowId?frontId=${this.state.frontData.recipient.handle}`, {})
         .then((res) => res.json())
         .then((result) => {
           this.setState({
-            inflowCstData: result,
+            inflowId: result[0].inflowId,
           });
-          console.log("inflowCstData", this.state.inflowCstData);
-          console.log("frontData", this.state.frontData);
-          console.log("FrontAvatar", this.state.FrontAvatar);
-        });
+
+          console.log("custIdRes", result[0].inflowId)
+          const InFlowId = result[0].inflowId;
+          //Inflow Get Customer Detail
+          fetch(
+            `${inFlowAPI_URL}customers/${InFlowId}?include=addresses&include=pricingScheme&include=defaultLocation&include=taxingScheme&include=defaultPaymentTerms`,
+            {
+              method: "GET", // or 'PUT'
+              headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                  "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
+                Accept: "application/json;version=2020-01-30",
+              },
+            }
+          )
+            .then((res) => res.json())
+            .then((result) => {
+              this.setState({
+                inflowCstData: result,
+              });
+              console.log("inflowCstData", this.state.inflowCstData);
+              console.log("frontData", this.state.frontData);
+              console.log("FrontAvatar", this.state.FrontAvatar);
+            });
 
           //Get Customer Orders
           fetch(
@@ -268,8 +268,8 @@ class Plugin extends React.Component {
               });
               console.log("orderData", this.state.orderData);
             });
-    });
-  
+        });
+
     }
   }
 
@@ -387,8 +387,8 @@ class Plugin extends React.Component {
   };
 
   setAddress = (address) => {
-    const fixadd = address.town.replace(/ *\([^)]*\) */g,"").replace(/,/g, '')
-    const fixaddj = address.town_kanji.replace(/ *\（[^)]*\） */g,"").replace(/,/g, '')
+    const fixadd = address.town.replace(/ *\([^)]*\) */g, "").replace(/,/g, '')
+    const fixaddj = address.town_kanji.replace(/ *\（[^)]*\） */g, "").replace(/,/g, '')
 
 
     this.setState((prevState, props) => ({
@@ -593,8 +593,8 @@ class Plugin extends React.Component {
                           </Modal>
 
                           <div className="h6 font-weight-300">
-                            
-                              { frontData.recipient.handle || <Skeleton />}
+
+                            {frontData.recipient.handle || <Skeleton />}
                           </div>
                           <div
                             className="h6 mt-4"
@@ -759,10 +759,10 @@ class Plugin extends React.Component {
                                 <div className="modal-body">
                                   <FormGroup className="mb-4">
 
-                                  <Row className="justify-content-center">
+                                    <Row className="justify-content-center">
 
-                                    <AddressInput changeAddress={this.setAddress}/>
-                                  </Row>
+                                      <AddressInput changeAddress={this.setAddress} />
+                                    </Row>
                                     {(this.state.inflowCstData.addresses || []).map(
                                       (item, index) => (
                                         <>

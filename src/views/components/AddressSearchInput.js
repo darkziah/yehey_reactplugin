@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
@@ -83,10 +83,6 @@ export const AddressInput = (props) => {
 
   const getAddresses = value => {
     const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-
-    
-
     return inputValue
   };
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useState, useContext } from "react";
 import Skeleton from "react-loading-skeleton";
 
 // reactstrap components
@@ -21,6 +21,8 @@ import {
 
 import classnames from "classnames";
 
+import axios from 'axios';
+
 import { ToastContainer, toast } from "react-toastify";
 import AddressInput from "./components/AddressSearchInput";
 
@@ -32,6 +34,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Plugin = (props) => {
   const [ActiveTab, setActiveTab] = useState("InflowDetail")
+  const [FrontAPIToken] = useState("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsicHJpdmF0ZToqIiwic2hhcmVkOioiLCJwcm92aXNpb25pbmciXSwiaWF0IjoxNTgzMTI0NzE2LCJpc3MiOiJmcm9udCIsInN1YiI6ImpwbWQiLCJqdGkiOiI0NGMyYjgxOGNkMGQ2Y2NmIn0.wK8kzIPIZINy4G38-1pY9WANYAcFkCzw_MieJ93RrpY")
   const [inFlowAPI_URL] = useState("https://cloudapi.inflowinventory.com/11b89fbf-18bc-4c00-bfff-cf416f56e1a0/")
   const [frontData, setfrontData] = useState(props.frontData)
   const [frontContactData, setfrontContactData] = useState({})
@@ -56,31 +59,18 @@ const Plugin = (props) => {
    
     
   useEffect(() => {
+
+
+
+
+
+
+
+
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    const FrontAPIToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsicHJpdmF0ZToqIiwic2hhcmVkOioiLCJwcm92aXNpb25pbmciXSwiaWF0IjoxNTgzMTI0NzE2LCJpc3MiOiJmcm9udCIsInN1YiI6ImpwbWQiLCJqdGkiOiI0NGMyYjgxOGNkMGQ2Y2NmIn0.wK8kzIPIZINy4G38-1pY9WANYAcFkCzw_MieJ93RrpY";
-
-     //Get Avatar
-     fetch(props.FrontContactData.avatar_url, {
-      method: "GET", // or 'PUT'
-      headers: {
-        Authorization: FrontAPIToken,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.blob();
-      })
-      .then((result) => {
-        const url = URL.createObjectURL(result);
-
-        setFrontAvatar(url);
-        return result;
-      });
     
-  }, [props.frontId, props.custData, props.FrontContactData])
+  }, [props.frontId, props.custData])
 
   
  
@@ -88,35 +78,31 @@ const Plugin = (props) => {
 
   const setOrderDetailData = (data) => {
     console.log("PeofileORD", data);
-    setorderDetailData(data)
-    sethasDataOrderDetail(true)
+    this.setState({ orderDetailData: data });
+    this.setState({ hasDataOrderDetail: true });
   };
 
-  const editActiveTab = (tab) => {
-    setActiveTab(tab)
-  }
+
 
   /* Notify if Submited */
 
-  let notifyId = null;
-
   const notifyInflowSubmit = () =>
-    (notifyId = toast.info("Processing...", { autoClose: false }));
+    (this.submitId = toast.info("Processing...", { autoClose: false }));
   const notifyInflowSubmitSucc = () =>
-    toast.update(notifyId, {
+    toast.update(this.submitId, {
       render: "Submit Success",
       type: toast.TYPE.SUCCESS,
       autoClose: 3000,
     });
     
   const notifyInflowSubmitFail = () =>
-    toast.update(notifyId, {
+    toast.update(this.submitId, {
       render: "Submit Failed",
       type: toast.TYPE.ERROR,
       autoClose: 3000,
     });
 
-    const submitInflowData = () => {
+    const submitInflowData = (custid) => {
     notifyInflowSubmit();
 
     fetch(`${inFlowAPI_URL}customers`, {
@@ -138,8 +124,6 @@ const Plugin = (props) => {
         notifyInflowSubmitFail();
       });
   };
-
-
 
   const setAddress = (address) => {
     const fixadd = address.town.replace(/ *\([^)]*\) */g,"").replace(/,/g, '')
@@ -662,7 +646,7 @@ const Plugin = (props) => {
                                     type="button"
                                     onClick={() => {
                                       setEditRemarks(false);
-                                      submitInflowData();
+                                      this.submitInflowData();
                                     }}
                                   >
                                     Save changes
@@ -712,7 +696,7 @@ const Plugin = (props) => {
                 inflowCstData={props.custData}
                 frontData={frontData}
                 orderData={props.custOrderData}
-                editActiveTab={editActiveTab}
+                
               />
             </TabPane>
             <TabPane tabId="OrderDetailTab">
@@ -721,7 +705,9 @@ const Plugin = (props) => {
                   <NavbarBrand
                     className={classnames("mb-sm-3 mb-md-0", {})}
                     onClick={(e) =>
-                      setActiveTab("OrderListTab")
+                      this.setState({
+                        ActiveTab: "OrderListTab",
+                      })
                     }
                     href="#pablo"
                     role="tab"

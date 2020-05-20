@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Front from "@frontapp/plugin-sdk";
 
@@ -6,55 +6,30 @@ import Front from "@frontapp/plugin-sdk";
 import SearchInflow from "./views/SearchInflow"
 import Plugin from "./views/Plugin"
 
+import { getInflowId, getCustDetail, getCustOrder, getFrontContactData } from './views/api/data'
+
+
+
 function App() {
-  const [hasRecord, setHasRecord] = useState(false);
-  const [frontData, setfrontData] = useState({});
-  const [frontId, setfrontId] = useState('');
-  const [inFlowRecord, setinFlowRecord] = useState({});
+  const [FrontId, setFrontId] = useState(''); // facebook id or front id
+  const [pluginData, setpluginData] = useState({}); // plugin record of Facebook id
+  const [hasRecord, setHasRecord] = useState(false); // changing search to plugin
+  const [frontData, setfrontData] = useState(); //for avatar frontdata
+  const [custOrderData, setcustOrderData] = useState();
+  const [FrontContactData, setFrontContactData] = useState();
 
-  const refFromCreateRef = createRef()
+  const [custData, setcustData] = useState({});
 
-  if (!refFromCreateRef.current) {
-    refFromCreateRef.current = hasRecord
-  }
-
-  async function getInflowId(value) {
-    const response = await fetch(`https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/getInflowId?frontId=${value}`, {});
-    const json = await response.json();
-
-    if (Object.keys(json).length === 0) {
-      setHasRecord(false)
-    } else {
-      setinFlowRecord(json[0])
-      setHasRecord(true)
-    }
-    return json;
-  }
-
-  const LinkedDone = () => {
-    getInflowId(frontId)
-  }
-
-
-  useEffect(() => {
-    const Process = (value) => {
-      setfrontData(value)
-      if (value.recipient.handle) {
-        setfrontId(value.recipient.handle)
-        getInflowId(value.recipient.handle).then(data => {
-        console.log("ID",value.recipient.handle)
-        });
-      }
-    }
-
+  // if counter is changed, than fn will be updated with new counter value
+  const fn = React.useCallback(() => {
     Front.contextUpdates.subscribe(context => {
       switch (context.type) {
         case 'noConversation':
           console.log('No conversation selected');
           break;
         case 'singleConversation':
-          console.log('Selected conversation:', context.conversation);
-          Process(context.conversation)
+          setfrontData(context.conversation)
+          setFrontId(context.conversation.recipient.handle)
           break;
         case 'multiConversations':
           console.log('Multiple conversations selected', context.conversations);
@@ -65,27 +40,105 @@ function App() {
       }
     });
 
+  }, [FrontId]);
 
-  }, [frontId]);
+  // if counter is changed, than fn will not be updated and counter will be always 1 inside fn
+  /*const fnBad = useCallback(() => {
+      setCounter(counter + 1);
+    }, []);*/
+  const prevFrontIdRef = React.useRef();
+  // if fn or counter is changed, than useEffect will rerun
+  useEffect(() => {
+    prevFrontIdRef.current = FrontId;
+    if (!(FrontId === prevFrontIdRef.current)) return; // this will stop the loop if counter is even
 
-  if (refFromCreateRef.current) {
+
+    fn();
+  }, [prevFrontIdRef, fn]);
+
+  useEffect(() => {
+    prevFrontIdRef.current = FrontId;
+
+  });
 
 
-    return (
-      <>
-        <Plugin frontData={frontData}/>
-      </>
-    )
-  } else {
-    return (
-      <>
-        {console.log(frontId)}
-        <SearchInflow frontId={frontId}  LinkedDone={LinkedDone}/>
-      </>
-    )
-  };
+  const prevFrontId = prevFrontIdRef.current;
+
+
+  useEffect(() => {
+    if (prevFrontId === FrontId) {
+      return;
+    } else {
+      frontidChecker(FrontId)
+      return;
+    }
+
+  }, [FrontId]);
+
+
+  const LinkedDone = () => {
+    frontidChecker(FrontId)
+  }
+
+
+  async function frontidChecker(id) {
+
+    const data = await getInflowId(id)
+    if (!data) {
+      console.log('data false', data)
+      setHasRecord(false)
+      return
+    } else {
+      console.log('data', data)
+
+      const proc = await Process(data)
+
+      if(proc){
+        setHasRecord(true)
+        return
+      }
+      
+      
+      
+    }
+
+
+
+  }
+
+
+  async function Process(data){
+
+    const custData = await getCustDetail(data.inflowId)
+    const custOrderData = await getCustOrder(data.inflowId)
+    const getFContactData = await getFrontContactData(frontData)
+    
+      setcustOrderData(custOrderData)
+      setcustData(custData)
+      setFrontContactData(getFContactData)
+      setpluginData(data)
+     
+
+    return new Promise(resolve => {
+    
+      if(custOrderData){
+        resolve(true)
+      }
+    })
+  }
+
+
+
+  // this will be infinite loop because fn is always changing with new counter value
+  /*useEffect(() => {
+    fn();
+  }, [fn]);*/
+
+  return (
+    <div>
+      {hasRecord ? <Plugin FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} /> : <SearchInflow frontId={FrontId} LinkedDone={LinkedDone} />}
+    </div>
+  );
 }
-
-
 
 export default App;

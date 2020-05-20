@@ -7,12 +7,12 @@ import CurrencyFormat from 'react-currency-format';
 const Ordertab = (props) => {
   const customerId = props.inflowCstData.customerId
 
-  
+
 
   const setOrderDetail = data => {
     console.log('setOrderDetail', data)
     props.setOrderDetailData(data)
-    props.onNameChange('OrderDetailTab')
+    props.editActiveTab('OrderDetailTab')
   }
 
   const setOrderType = (type) => {
