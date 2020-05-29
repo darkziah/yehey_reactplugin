@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Front from "@frontapp/plugin-sdk";
+import { IonLoading } from '@ionic/react';
 
 
 import SearchInflow from "./views/SearchInflow"
@@ -19,6 +20,7 @@ function App() {
   const [FrontContactData, setFrontContactData] = useState();
 
   const [custData, setcustData] = useState({});
+  const [showLoading, setShowLoading] = useState(true);
 
   // if counter is changed, than fn will be updated with new counter value
   const fn = React.useCallback(() => {
@@ -77,6 +79,7 @@ function App() {
 
 
   const LinkedDone = () => {
+    setShowLoading(true)
     frontidChecker(FrontId)
   }
 
@@ -87,6 +90,7 @@ function App() {
     if (!data) {
       console.log('data false', data)
       setHasRecord(false)
+      setShowLoading(false)
       return
     } else {
       console.log('data', data)
@@ -95,6 +99,7 @@ function App() {
 
       if(proc){
         setHasRecord(true)
+        setShowLoading(false)
         return
       }
       
@@ -136,6 +141,13 @@ function App() {
 
   return (
     <div>
+      <IonLoading
+        cssClass='my-custom-class'
+        isOpen={showLoading}
+        message={'Please wait...'}
+        
+      />
+
       {hasRecord ? <Plugin FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} /> : <SearchInflow frontId={FrontId} LinkedDone={LinkedDone} />}
     </div>
   );
