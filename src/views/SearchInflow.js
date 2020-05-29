@@ -11,6 +11,8 @@ import {
 
 import SearchClient from '../views/components/InflowSearch'
 import * as Icon from 'react-bootstrap-icons';
+import { facebookApi } from '../views/api/facebook'
+
 
 function SearchInflow(props) {
   const [hasClient, setHasClient] = useState(false);
@@ -39,7 +41,7 @@ function SearchInflow(props) {
           });
           if (responsefb.ok) return await props.LinkedDone(props.frontId)
           throw new Error(responsefb.status)
-        
+
         case 'email':
           const urlemail = `https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/insertEmail`;
           const responseemail = await fetch(`${urlemail}?fid=${value.fid}&inflowId=${value.inFlowId}&type=${value.type}`, {
@@ -47,8 +49,8 @@ function SearchInflow(props) {
           });
           if (responseemail.ok) return props.LinkedDone(props.frontId)
           throw new Error(responseemail.status)
-          
-          default:
+
+        default:
           break;
       }
 
@@ -62,7 +64,7 @@ function SearchInflow(props) {
         registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
         return
       } else {
-        const response = await fetch(`https://graph.facebook.com/v7.0/${value}/ids_for_pages?access_token=EAAHo1PvqXggBAK65huycPpiPPWeHwfD7GLu1fZBG94U6QOCUgJ8OJoOaxkRZBxtqva1V7JM19g6bIeEzUFPMHVx7XNAZAfzW9AOGFAUKqkBNtjJINSGEIs5jf4sSp4114syLcessFZCTDICNLCe0gUR3tkIAZA9JqtaToBHxWZCr8sFA0IjGunrcD3yg1cHVsZD`, {});
+        const response = await getId(value)
         const json = await response.json();
 
 
@@ -92,6 +94,62 @@ function SearchInflow(props) {
 
 
     getFBid(props.frontId)
+  }
+
+
+  const getId = async (id) => {
+    let data;
+    try {
+      props.loadingText('Getting Id from LTD')
+      const ltdData = await facebookApi('ltd', id)
+      if (Object.keys(ltdData) === 'error') {
+        props.loadingText('Getting Id from Cargo')
+        const cargoData = await facebookApi('cargo', id)
+        if (Object.keys(cargoData) === 'error') {
+          props.loadingText('Getting Id from Gadget Repair')
+          const repairData = await facebookApi('repair', id)
+          if (Object.keys(repairData) === 'error') {
+            props.loadingText('Getting Id from Yehey Japan 2')
+            const yj2Data = await facebookApi('yj2', id)
+            if (Object.keys(yj2Data) === 'error') {
+              props.loadingText('Getting Id from Fast Remittance')
+              const fmData = await facebookApi('fast_rem', id)
+              if (Object.keys(fmData) === 'error') {
+                props.loadingText('Getting Id from Yehey Remit')
+                const yrData = await facebookApi('yehey_remit', id)
+                if (Object.keys(yrData) === 'error') {
+                  return
+                } else {
+                  props.loadingText('Loading Client')
+                  data = yrData
+                }
+              } else {
+                props.loadingText('Loading Client')
+                data = fmData
+              }
+            } else {
+              props.loadingText('Loading Client')
+              data = yj2Data
+            }
+          } else {
+            props.loadingText('Loading Client')
+            data = repairData
+          }
+        } else {
+          props.loadingText('Loading Client')
+          data = cargoData
+        }
+      } else {
+        props.loadingText('Loading Client')
+        data = ltdData
+      }
+
+
+    } catch (e) {
+      console.log("Error", e);
+    } finally {
+      return data
+    }
   }
 
   return (

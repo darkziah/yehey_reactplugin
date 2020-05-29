@@ -21,12 +21,14 @@ function App() {
 
   const [custData, setcustData] = useState({});
   const [showLoading, setShowLoading] = useState(true);
+  const [loadingText, setloadingText] = useState('Please wait...');
 
   // if counter is changed, than fn will be updated with new counter value
   const fn = React.useCallback(() => {
     Front.contextUpdates.subscribe(context => {
       switch (context.type) {
         case 'noConversation':
+          setHasRecord(false)
           console.log('No conversation selected');
           break;
         case 'singleConversation':
@@ -135,6 +137,10 @@ function App() {
   }
 
 
+  const updateLodingText = (text) => {
+    setloadingText(text)
+  }
+
 
   // this will be infinite loop because fn is always changing with new counter value
   /*useEffect(() => {
@@ -146,11 +152,11 @@ function App() {
       <IonLoading
         cssClass='my-custom-class'
         isOpen={showLoading}
-        message={'Please wait...'}
+        message={loadingText}
         
       />
 
-      {hasRecord ? <Plugin FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} /> : <SearchInflow frontId={FrontId} LinkedDone={LinkedDone} />}
+      {hasRecord ? <Plugin FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} /> : <SearchInflow frontId={FrontId} LinkedDone={LinkedDone} loadingText={updateLodingText} />}
     </div>
   );
 }

@@ -91,7 +91,7 @@ export const SearchClient = (props) => {
   }
 
   const inputProps = {
-    placeholder: 'Search Address',
+    placeholder: 'Search Client',
     value,
     onChange: onChange,
     className: "form-control-alternative"
