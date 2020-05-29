@@ -69,11 +69,11 @@ function SearchInflow(props) {
 
 
 
-        if (Object.keys(data).length === 0) {
+        if (data.length === 0) {
           registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
           return
         } else {
-          const options = data.data.map(function (row) {
+          const options = data.map(function (row) {
             return { fid: row.id, inFlowId: clientData.customerId, page: row.page, type: 'facebook' }
           })
           options.map((val) => {
