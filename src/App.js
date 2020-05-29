@@ -138,8 +138,11 @@ function App() {
 
 
   const updateLodingText = (text) => {
+    showLoading(true)
     setloadingText(text)
   }
+
+
 
 
   // this will be infinite loop because fn is always changing with new counter value
