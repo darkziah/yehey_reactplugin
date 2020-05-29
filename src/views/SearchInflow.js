@@ -102,22 +102,22 @@ function SearchInflow(props) {
     try {
       props.loadingText('Getting Id from LTD')
       const ltdData = await facebookApi('ltd', id)
-      if (Object.keys(ltdData) === 'error') {
+      if (Object.keys(ltdData)[0] === 'error') {
         props.loadingText('Getting Id from Cargo')
         const cargoData = await facebookApi('cargo', id)
-        if (Object.keys(cargoData) === 'error') {
+        if (Object.keys(cargoData)[0] === 'error') {
           props.loadingText('Getting Id from Gadget Repair')
           const repairData = await facebookApi('repair', id)
-          if (Object.keys(repairData) === 'error') {
+          if (Object.keys(repairData)[0] === 'error') {
             props.loadingText('Getting Id from Yehey Japan 2')
             const yj2Data = await facebookApi('yj2', id)
-            if (Object.keys(yj2Data) === 'error') {
+            if (Object.keys(yj2Data)[0] === 'error') {
               props.loadingText('Getting Id from Fast Remittance')
               const fmData = await facebookApi('fast_rem', id)
-              if (Object.keys(fmData) === 'error') {
+              if (Object.keys(fmData)[0] === 'error') {
                 props.loadingText('Getting Id from Yehey Remit')
                 const yrData = await facebookApi('yehey_remit', id)
-                if (Object.keys(yrData) === 'error') {
+                if (Object.keys(yrData)[0] === 'error') {
                   return
                 } else {
                   props.loadingText('Loading Client')
