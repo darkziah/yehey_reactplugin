@@ -23,7 +23,7 @@ export function getInflowId(value) {
 }
 
 
-export function getCustDetail(id) {
+export function getCustDetailInflow(id) {
     return new Promise(resolve => {
         fetch(
             `${inFlowAPI_URL}customers/${id}?include=addresses&include=pricingScheme&include=defaultLocation&include=taxingScheme&include=defaultPaymentTerms`,
@@ -45,7 +45,41 @@ export function getCustDetail(id) {
     })
 }
 
+export function getCustDetail(id) {
+    return new Promise(resolve => {
+        fetch(
+            `https://inflow.yehey.jp/api/inflow/customers/${id}`,
+            {
+                method: "GET",
+               
+            }
+        )
+            .then((result) => result.json())
+            .then((result) => {
+                resolve(result);
+                return
+            })
+    })
+}
+
 export function getCustOrder(id) {
+    return new Promise(resolve => {
+        fetch(
+            `https://inflow.yehey.jp/api/inflow/sales-orders/${id}`,
+            {
+                method: "GET",
+               
+            }
+        )
+            .then((result) => result.json())
+            .then((result) => {
+                resolve(result);
+                return
+            })
+    })
+}
+
+export function getCustOrderInflow(id) {
     return new Promise(resolve => {
         fetch(
             `${inFlowAPI_URL}sales-orders?filter[customerId]=${id}&include=lines.product.defaultImage`,
