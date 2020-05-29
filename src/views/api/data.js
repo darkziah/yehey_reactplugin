@@ -48,7 +48,7 @@ export function getCustDetailInflow(id) {
 export function getCustDetail(id) {
     return new Promise(resolve => {
         fetch(
-            `https://inflow.yehey.jp/api/inflow/customers/${id}`,
+            `https://vercelapi.yehey.jp/api/inflow/customers/${id}`,
             {
                 method: "GET",
                
@@ -65,10 +65,9 @@ export function getCustDetail(id) {
 export function getCustOrder(id) {
     return new Promise(resolve => {
         fetch(
-            `https://inflow.yehey.jp/api/inflow/sales-orders/${id}`,
+            `https://vercelapi.yehey.jp/api/inflow/sales-orders/${id}`,
             {
                 method: "GET",
-               
             }
         )
             .then((result) => result.json())
@@ -104,7 +103,7 @@ export function getCustOrderInflow(id) {
 export function getFrontContactData(frontData) {
     return new Promise(resolve => {
         fetch(
-            `https://api2.frontapp.com/contacts/${frontData.recipient.contact.id}`,
+            `https://vercelapi.yehey.jp/api/front/context/${frontData.recipient.contact.id}`,
             {
                 method: "GET", // or 'PUT'
                 headers: {

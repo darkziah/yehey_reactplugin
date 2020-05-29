@@ -30,6 +30,8 @@ function App() {
           console.log('No conversation selected');
           break;
         case 'singleConversation':
+          setShowLoading(true)
+          console.log('context', context)
           setfrontData(context.conversation)
           setFrontId(context.conversation.recipient.handle)
           break;
