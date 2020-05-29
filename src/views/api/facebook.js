@@ -1,7 +1,7 @@
 export function facebookApi(page, id) {
     return new Promise(resolve => {
         fetch(
-            `https://vercelapi.yehey.jp/api/inflow/facebook/${page}/${id}`,
+            `https://vercelapi.yehey.jp/api/facebook/${page}/${id}`,
             {
                 method: "GET",
             }

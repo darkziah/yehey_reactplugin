@@ -64,7 +64,7 @@ function SearchInflow(props) {
         registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
         return
       } else {
-        const response = await getId(value)
+        const response = await getId(props.frontId)
         const json = await response.json();
 
 
