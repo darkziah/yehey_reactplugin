@@ -64,16 +64,16 @@ function SearchInflow(props) {
         registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
         return
       } else {
-        const response = await getId(props.frontId)
-        const json = await response.json();
+        const data = await getId(props.frontId)
+        
 
 
 
-        if (Object.keys(json).length === 0) {
+        if (Object.keys(data).length === 0) {
           registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
           return
         } else {
-          const options = json.data.map(function (row) {
+          const options = data.data.map(function (row) {
             return { fid: row.id, inFlowId: clientData.customerId, page: row.page, type: 'facebook' }
           })
           options.map((val) => {
@@ -84,7 +84,7 @@ function SearchInflow(props) {
 
           })
         }
-        return json;
+        return data;
       }
 
 
