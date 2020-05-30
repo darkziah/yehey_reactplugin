@@ -64,12 +64,11 @@ function SearchInflow(props) {
         registerFbId({ fid: props.frontId, inFlowId: clientData.customerId, type: 'email' })
         return
       } else {
-        const data = await getId(props.frontId)
-        console.log('getFbid',data)
+        const data = await getId(props.frontId);
+        console.log('getFbid',data);
 
-
-
-          const options = data.map(function (row) {
+        if(data){
+            const options = data.data.map(function (row) {
             return { fid: row.id, inFlowId: clientData.customerId, page: row.page, type: 'facebook' }
           })
           options.map((val) => {
@@ -79,6 +78,9 @@ function SearchInflow(props) {
             return val
 
           })
+        }
+
+          
        
        
       }
@@ -94,6 +96,7 @@ function SearchInflow(props) {
 
 
   const getId = async (id) => {
+      
     let data;
     try {
       props.loadingText('Getting Id from LTD')
@@ -144,6 +147,7 @@ function SearchInflow(props) {
     } catch (e) {
       console.log("Error", e);
     } finally {
+        console.log('getid',data);
       return data
     }
   }

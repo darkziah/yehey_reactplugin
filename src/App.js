@@ -33,7 +33,7 @@ function App() {
           break;
         case 'singleConversation':
           setShowLoading(true)
-          console.log('context', context)
+          console.log(context.conversation)
           setfrontData(context.conversation)
           setFrontId(context.conversation.recipient.handle)
           break;
@@ -138,8 +138,15 @@ function App() {
 
 
   const updateLodingText = (text) => {
-    showLoading(true)
-    setloadingText(text)
+      setShowLoading(false)
+    if(showLoading){
+        return
+    } else {
+        setloadingText(text)
+        setShowLoading(true)
+    }
+    
+    
   }
 
 

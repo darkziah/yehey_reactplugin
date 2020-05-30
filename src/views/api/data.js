@@ -101,9 +101,16 @@ export function getCustOrderInflow(id) {
 }
 
 export function getFrontContactData(frontData) {
+    let id;
+    if(frontData.type === 'email'){
+        id = `alt:email:${frontData.recipient.handle}`
+    }else {
+        id = `alt:facebook:${frontData.recipient.handle}`
+    }
+
     return new Promise(resolve => {
         fetch(
-            `https://vercelapi.yehey.jp/api/front/context/${frontData.recipient.contact.id}`,
+            `https://vercelapi.yehey.jp/api/front/context/${id}`,
             {
                 method: "GET", // or 'PUT'
                 headers: {
@@ -117,6 +124,7 @@ export function getFrontContactData(frontData) {
                 return
             })
     })
+    
 }
 
 export function getFrontAvatar(frontData) {

@@ -63,22 +63,32 @@ const Plugin = (props) => {
     fetch(
       `https://vercelapi.yehey.jp/api/front/avatar/${props.frontId}`,
       {
-        method: "GET", // or 'PUT'
-        body: props.FrontContactData.avatar_url
+          method: "POST",
+        headers: {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+},
+
+        body: JSON.stringify({avatar: props.FrontContactData.avatar_url})
       }
     )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        
         return response.blob();
       })
       .then((result) => {
+          console.log(result)
         const url = URL.createObjectURL(result);
-
+        console.log("url", url)
         setFrontAvatar(url);
         return result;
-      });
+      })
+      .catch(e =>{
+          console.log(e)
+      })
 
   }, [props.frontId, props.custData, props.FrontContactData])
 
