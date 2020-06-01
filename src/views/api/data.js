@@ -48,7 +48,7 @@ export function getCustDetailInflow(id) {
 export function getCustDetail(id) {
     return new Promise(resolve => {
         fetch(
-            `http://api.yehey.jp/inflow/customers/${id}`,
+            `https://api.yehey.jp/inflow/customers/${id}`,
             {
                 method: "GET",
             }
@@ -64,7 +64,7 @@ export function getCustDetail(id) {
 export function getCustOrder(id) {
     return new Promise(resolve => {
         fetch(
-            `http://api.yehey.jp/inflow/sales-orders/${id}`,
+            `https://api.yehey.jp/inflow/sales-orders/${id}`,
             {
                 method: "GET",
             }
@@ -109,7 +109,7 @@ export function getFrontContactData(frontData) {
 
     return new Promise(resolve => {
         fetch(
-            `http://api.yehey.jp/frontapp/contacts/${id}`,
+            `https://api.yehey.jp/frontapp/contacts/${id}`,
             {
                 method: "GET", // or 'PUT'
             }
@@ -173,7 +173,7 @@ export function getFrontAvatar2(frontData) {
 
 export function submitInflowData(inflowCstData) {
     return new Promise(resolve => {
-        fetch(`http://api.yehey.jp/inflow/customers`, {
+        fetch(`https://api.yehey.jp/inflow/customers`, {
             method: "PUT",
             body: JSON.stringify(inflowCstData),
         })
