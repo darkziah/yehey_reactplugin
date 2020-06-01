@@ -27,6 +27,7 @@ import AddressInput from "./components/AddressSearchInput";
 import OrderListTab from "./components/OrderList";
 import OrderDetailTab from "./components/OrderDetail.js";
 import "react-toastify/dist/ReactToastify.css";
+import Avatar from 'react-avatar';
 
 // Modals
 
@@ -58,36 +59,42 @@ const Plugin = (props) => {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    
+
     //Get Avatar
     fetch(
-      `https://vercelapi.yehey.jp/api/front/avatar/${props.frontId}`,
+      `http://api.yehey.jp/frontapp/avatar`,
       {
-          method: "POST",
+        method: "POST",
         headers: {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-},
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
 
-        body: JSON.stringify({avatar: props.FrontContactData.avatar_url})
+        body: JSON.stringify({ avatar: props.FrontContactData.avatar_url })
       }
     )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        
+
         return response.blob();
       })
       .then((result) => {
-          console.log(result)
-        const url = URL.createObjectURL(result);
-        console.log("url", url)
-        setFrontAvatar(url);
+        console.log(result)
+
+        if(result){
+          const url = URL.createObjectURL(result);
+          console.log("url", url)
+          setFrontAvatar(url);
+        }else {
+          setFrontAvatar(false);
+        }
+       
         return result;
       })
-      .catch(e =>{
-          console.log(e)
+      .catch(e => {
+        console.log(e)
       })
 
   }, [props.frontId, props.custData, props.FrontContactData])
@@ -129,13 +136,19 @@ const Plugin = (props) => {
   const submitInflowData = () => {
     notifyInflowSubmit();
 
-    fetch(`${inFlowAPI_URL}customers`, {
+    /**
+     * fetch(`${inFlowAPI_URL}customers`, {
       method: "PUT", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
         Accept: "application/json;version=2020-01-30",
       },
+      body: JSON.stringify(inflowCstData),
+    }) 
+    **/
+    fetch(`http://api.yehey.jp/inflow/customers`, {
+      method: "PUT",
       body: JSON.stringify(inflowCstData),
     })
       .then((result) => result.json())
@@ -242,11 +255,11 @@ const Plugin = (props) => {
                             href="#pablo"
                             onClick={(e) => e.preventDefault()}
                           >
-                            <img
+                            {Avatar ? <img
                               alt="..."
                               className="rounded-circle"
                               src={FrontAvatar}
-                            />
+                            /> : <Avatar name={inflowCstData.name || "None"} size={150} round="20px" />}
                           </a>
                         </div>
                       </Col>

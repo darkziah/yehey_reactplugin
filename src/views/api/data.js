@@ -48,10 +48,9 @@ export function getCustDetailInflow(id) {
 export function getCustDetail(id) {
     return new Promise(resolve => {
         fetch(
-            `https://vercelapi.yehey.jp/api/inflow/customers/${id}`,
+            `http://api.yehey.jp/inflow/customers/${id}`,
             {
                 method: "GET",
-               
             }
         )
             .then((result) => result.json())
@@ -65,7 +64,7 @@ export function getCustDetail(id) {
 export function getCustOrder(id) {
     return new Promise(resolve => {
         fetch(
-            `https://vercelapi.yehey.jp/api/inflow/sales-orders/${id}`,
+            `http://api.yehey.jp/inflow/sales-orders/${id}`,
             {
                 method: "GET",
             }
@@ -102,20 +101,17 @@ export function getCustOrderInflow(id) {
 
 export function getFrontContactData(frontData) {
     let id;
-    if(frontData.type === 'email'){
+    if (frontData.type === 'email') {
         id = `alt:email:${frontData.recipient.handle}`
-    }else {
+    } else {
         id = `alt:facebook:${frontData.recipient.handle}`
     }
 
     return new Promise(resolve => {
         fetch(
-            `https://vercelapi.yehey.jp/api/front/context/${id}`,
+            `http://api.yehey.jp/frontapp/contacts/${id}`,
             {
                 method: "GET", // or 'PUT'
-                headers: {
-                    Authorization: FrontAPIToken,
-                },
             }
         )
             .then((result) => result.json())
@@ -124,7 +120,7 @@ export function getFrontContactData(frontData) {
                 return
             })
     })
-    
+
 }
 
 export function getFrontAvatar(frontData) {
@@ -160,39 +156,31 @@ export function getFrontAvatar(frontData) {
 export function getFrontAvatar2(frontData) {
     return new Promise(resolve => {
         fetch(frontData.avatar_url, {
-                    method: "GET",
-                    headers: {
-                        Authorization: FrontAPIToken,
-                    },
-                })
-                    .then((result) => result.json())
-                    .then((result) => { 
-                        
-                        resolve(result);
-                        return result
-                    })
-            })
- 
-}
-
-export function submitInflowData(inflowCstData) {
-    return new Promise(resolve => {
-        fetch(`${inFlowAPI_URL}customers`, {
-            method: "PUT", // or 'PUT'
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer T5LXHGqawsCr8RwnCj-VjDaoA1dRcZbOvy1x3dg9EPU",
-                Accept: "application/json;version=2020-01-30",
+                Authorization: FrontAPIToken,
             },
-            body: JSON.stringify(inflowCstData),
         })
             .then((result) => result.json())
             .then((result) => {
 
+                resolve(result);
+                return result
+            })
+    })
 
+}
+
+export function submitInflowData(inflowCstData) {
+    return new Promise(resolve => {
+        fetch(`http://api.yehey.jp/inflow/customers`, {
+            method: "PUT",
+            body: JSON.stringify(inflowCstData),
+        })
+            .then((result) => result.json())
+            .then((result) => {
                 resolve(result);
                 return
-
             })
     })
 }

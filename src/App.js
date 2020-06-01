@@ -28,12 +28,11 @@ function App() {
     Front.contextUpdates.subscribe(context => {
       switch (context.type) {
         case 'noConversation':
-          setHasRecord(false)
+          
           console.log('No conversation selected');
           break;
         case 'singleConversation':
           setShowLoading(true)
-          console.log(context.conversation)
           setfrontData(context.conversation)
           setFrontId(context.conversation.recipient.handle)
           break;
