@@ -28,11 +28,11 @@ function App() {
     Front.contextUpdates.subscribe(context => {
       switch (context.type) {
         case 'noConversation':
-          
+          setShowLoading(true)
           console.log('No conversation selected');
           break;
         case 'singleConversation':
-          setShowLoading(true)
+          
           setfrontData(context.conversation)
           setFrontId(context.conversation.recipient.handle)
           break;
@@ -69,9 +69,10 @@ function App() {
 
   const prevFrontId = prevFrontIdRef.current;
 
-
+  //check if same FrontID
   useEffect(() => {
     if (prevFrontId === FrontId) {
+      setShowLoading(false)
       return;
     } else {
       frontidChecker(FrontId)
