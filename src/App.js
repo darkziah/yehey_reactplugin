@@ -32,7 +32,6 @@ function App() {
           console.log('No conversation selected');
           break;
         case 'singleConversation':
-          setShowLoading(true)
           setfrontData(context.conversation)
           setFrontId(context.conversation.recipient.handle)
           break;
@@ -75,6 +74,7 @@ function App() {
       setShowLoading(false)
       return;
     } else {
+      setShowLoading(true)
       frontidChecker(FrontId)
       return;
     }
