@@ -101,7 +101,7 @@ export const SearchClient = (props) => {
 
     async function getInflowData(value) {
       const response = await fetch(
-        `https://vercelapi.yehey.jp/api/inflow/search/${value}`,
+        `https://api.yehey.jp/inflow/customers/search/${value}`,
         {
             method: "GET",
            
