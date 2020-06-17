@@ -9,6 +9,8 @@ import {
   Col
 } from "reactstrap";
 
+import _ from "lodash";
+
 import SearchClient from '../views/components/InflowSearch'
 import * as Icon from 'react-bootstrap-icons';
 import { facebookApi } from '../views/api/facebook'
@@ -212,24 +214,24 @@ function SearchInflow(props) {
                     <Row>
                       <Col className="text-left">
                         <span className="mb-0">
-                          {clientData.addresses.length === 0 ? "" : clientData.addresses[0].address.postalCode}
+                          {_.get(clientData, 'addresses[0].address.postalCode', '')}
                         </span>
                       </Col>
                       <Col className="text-right">
                         <span className="mb-0">
-                          {clientData.addresses.length === 0 ? "" : clientData.addresses[1].address.postalCode}
+                          {_.get(clientData, 'addresses[1].address.postalCode', '')}
                         </span>
                       </Col>
                     </Row>
                     <Row>
                       <Col className="text-left">
                         <span className="mb-0">
-                          {clientData.addresses.length === 0 ? "" : clientData.addresses[0].address.address1}
+                          {_.get(clientData, 'addresses[0].address.address1', '')}
                         </span>
                       </Col>
                       <Col className="text-right">
                         <span className="mb-0">
-                          {clientData.addresses.length === 0 ? "" : clientData.addresses[1].address.address1}
+                          {_.get(clientData, 'addresses[1].address.address1', '')}
                         </span>
                       </Col>
                     </Row>
