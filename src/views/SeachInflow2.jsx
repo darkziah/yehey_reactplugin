@@ -193,7 +193,7 @@ function SearchInflow(props) {
   }, [clientName, clientPhone]);
 
   async function prepLink(value) {
-    if(value){
+    if (value) {
       setclientData(value)
       linkAccount(value)
 
@@ -233,20 +233,20 @@ function SearchInflow(props) {
                           </IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol>
-                              <IonText>{_.get(client, 'addresses[0].address.postalCode', '')}</IonText>
-                              
-                              <p>{_.get(client, 'addresses[0].address.address1', '')}</p>
-                                
-                               
-                            </IonCol>
-                            <IonCol>
-                              <IonText>{_.get(client, 'addresses[1].address.postalCode', '')}</IonText>
-                              
-                              <p>{_.get(client, 'addresses[1].address.address1', '')}</p>
-                              </IonCol>
+                          <IonCol>
+                            <IonText>{_.get(client, 'addresses[0].address.postalCode', '')}</IonText>
+
+                            <p>{_.get(client, 'addresses[0].address.address1', '')}</p>
+
+
+                          </IonCol>
+                          <IonCol>
+                            <IonText>{_.get(client, 'addresses[1].address.postalCode', '')}</IonText>
+
+                            <p>{_.get(client, 'addresses[1].address.address1', '')}</p>
+                          </IonCol>
                         </IonRow>
-                     
+
 
 
                       </IonCardSubtitle>
@@ -263,8 +263,8 @@ function SearchInflow(props) {
               </IonRow>
             </>
           );
-             
-         
+
+
         })}
 
 

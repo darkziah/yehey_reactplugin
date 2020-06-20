@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { IonApp } from '@ionic/react';
+import { IonApp, IonRouterOutlet, } from '@ionic/react';
+
+import { IonReactRouter } from '@ionic/react-router';
+
+import Create from './views/Create'
 
 import "./assets/vendor/nucleo/css/nucleo.css";
 import "./assets/vendor/font-awesome/css/font-awesome.min.css";
@@ -27,13 +31,13 @@ import '@ionic/react/css/display.css';
 
 ReactDOM.render(
     <IonApp>
-        <Router>
-            <Switch>
-                <Route path="/">
-                    <App />
-                </Route>
-            </Switch>
-        </Router>
+        <IonReactRouter>
+            <IonRouterOutlet>
+                <Route path="/plugin" render={() => <Redirect to="/" />} exact={true} />
+                <Route path="/plugin" component={App} exact={true} />
+                <Route path="/create" component={Create} exact={true} />
+            </IonRouterOutlet>
+        </IonReactRouter>
     </IonApp>,
     document.getElementById('root')
 );
