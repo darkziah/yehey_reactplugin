@@ -11,10 +11,11 @@ import {
 
 import _ from "lodash";
 
-import SearchClient from '../views/components/InflowSearch'
+import SearchClient from '../views/components/InflowSearch2'
 import * as Icon from 'react-bootstrap-icons';
 import { facebookApi } from '../views/api/facebook'
 
+import { IonSearchbar, IonContent } from '@ionic/react';
 
 function SearchInflow(props) {
   const [hasClient, setHasClient] = useState(false);

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Front from "@frontapp/plugin-sdk";
-import { IonLoading } from '@ionic/react';
+import { IonLoading, IonPage, IonContent } from '@ionic/react';
 
 
 import SearchInflow from "./views/SearchInflow"
+import SearchInflow2 from "./views/SeachInflow2"
 import Plugin from "./views/Plugin"
 
 import { getInflowId, getCustDetail, getCustOrder, getFrontContactData } from './views/api/data'
@@ -158,7 +159,8 @@ function App() {
     }, [fn]);*/
 
     return (
-        <div>
+        <IonPage>
+           <IonContent>
             <IonLoading
                 cssClass='my-custom-class'
                 isOpen={showLoading}
@@ -171,9 +173,10 @@ function App() {
                     ?
                     <Plugin key={FrontId} FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} />
                     :
-                    <SearchInflow frontId={FrontId} LinkedDone={LinkedDone} loadingText={updateLodingText} />
+                    <SearchInflow2 frontId={FrontId} LinkedDone={LinkedDone} loadingText={updateLodingText} />
             }
-        </div>
+           </IonContent>
+        </IonPage>
     );
 }
 

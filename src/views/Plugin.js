@@ -18,7 +18,14 @@ import {
   FormGroup,
   Badge,
   UncontrolledTooltip,
+  
 } from "reactstrap";
+
+import {
+  IonFab,
+  IonFabButton,
+  IonIcon,
+} from "@ionic/react";
 
 import classnames from "classnames";
 
@@ -29,6 +36,9 @@ import OrderListTab from "./components/OrderList";
 import OrderDetailTab from "./components/OrderDetail.js";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "react-avatar";
+
+
+import { arrowForwardCircle } from "ionicons/icons";
 
 // Modals
 
@@ -47,6 +57,7 @@ const Plugin = (props) => {
   const [EditName, setEditName] = useState(false);
   const [EditPhone, setEditPhone] = useState(false);
   const [EditAddress, setEditAddress] = useState(false);
+  const [NameHover, setNameHover] = useState(false);
   const [PhoneHover, setPhoneHover] = useState(false);
   const [AddressHover, setAddressHover] = useState(false);
   const [hasDataOrderDetail, sethasDataOrderDetail] = useState(false);
@@ -296,11 +307,11 @@ const Plugin = (props) => {
                       {/* Client Name */}
 
                       <h3
-                        onMouseEnter={() => setPhoneHover(true)}
-                        onMouseLeave={() => setPhoneHover(false)}
+                        onMouseEnter={() => setNameHover(true)}
+                        onMouseLeave={() => setNameHover(false)}
                       >
                         {inflowCstData.name || <Skeleton />}
-                        {PhoneHover && (
+                        {NameHover && (
                           <>
                             <Badge
                               pill
@@ -764,6 +775,7 @@ const Plugin = (props) => {
           )}
         </TabPane>
       </TabContent>
+     
     </>
   );
 };
