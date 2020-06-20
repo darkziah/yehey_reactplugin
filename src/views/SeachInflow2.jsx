@@ -222,6 +222,7 @@ function SearchInflow(props) {
                     <IonCardHeader>
 
                       <IonCardTitle>{client.name}</IonCardTitle>
+                      <IonText>{_.get(client, 'phone', 'No Phone Number')}</IonText>
                       <IonCardSubtitle>
                         <IonRow>
                           <IonCol>
@@ -244,14 +245,6 @@ function SearchInflow(props) {
                               
                               <p>{_.get(client, 'addresses[1].address.address1', '')}</p>
                               </IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                               <IonText>{_.get(client, 'addresses[1].address.postalCode', '')}</IonText>
-                            </IonCol>
-                            <IonCol>
-                             
-                            </IonCol>
                         </IonRow>
                      
 
