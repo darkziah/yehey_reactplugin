@@ -90,7 +90,7 @@ function App() {
 
 
     async function frontidChecker(id) {
-
+        setHasRecord(false)
         const data = await getInflowId(id)
         if (!data) {
             console.log('data false', data)
@@ -171,7 +171,7 @@ function App() {
             {
                 hasRecord
                     ?
-                    <Plugin key={FrontId} FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} />
+                    <Plugin key={custData.contactId} FrontContactData={FrontContactData} custOrderData={custOrderData} custData={custData} pluginData={pluginData} frontId={FrontId} />
                     :
                     <SearchInflow2 frontId={FrontId} LinkedDone={LinkedDone} loadingText={updateLodingText} />
             }
