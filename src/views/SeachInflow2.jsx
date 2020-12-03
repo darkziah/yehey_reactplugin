@@ -46,15 +46,24 @@ function SearchInflow(props) {
   const linkAccount = (clientd) => {
 
     async function registerFbId(value) {
-
+      const urlfb = `https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/insertFBid`;
       switch (value.type) {
         case 'facebook':
-          const urlfb = `https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/insertFBid`;
+          
           const responsefb = await fetch(`${urlfb}?fid=${value.fid}&inflowId=${value.inFlowId}&pageName=${value.page.name}&pageId=${value.page.id}&type=${value.type}`, {
             method: 'POST',
           });
           if (responsefb.ok) return await props.LinkedDone(props.frontId)
           throw new Error(responsefb.status)
+
+         case 'custom':
+         
+          const responsefbcustom = await fetch(`${urlfb}?fid=${value.fid}&inflowId=${value.inFlowId}&pageName=${"custom"}&pageId=${"custom"}&type=${"facebook"}`, {
+            method: 'POST',
+          });
+          if (responsefbcustom.ok) return await props.LinkedDone(props.frontId)
+          throw new Error(responsefbcustom.status)
+
 
         case 'email':
           const urlemail = `https://ap-southeast-2.aws.webhooks.mongodb-stitch.com/api/client/v2.0/app/reactplugin-uxowx/service/AddressAPI/incoming_webhook/insertEmail`;
@@ -81,8 +90,11 @@ function SearchInflow(props) {
         const data = await getId(props.frontId);
         console.log('getFbid', data);
 
-        if (data) {
-          const options = data.data.map(function (row) {
+        if (data === "problem") {
+         registerFbId({ fid: props.frontId, inFlowId: clientd.customerId, type: 'custom' })
+         return
+        } else {
+           const options = data.data.map(function (row) {
             return { fid: row.id, inFlowId: clientd.customerId, page: row.page, type: 'facebook' }
           })
           options.map((val) => {
@@ -131,7 +143,7 @@ function SearchInflow(props) {
                 props.loadingText('Getting Id from Yehey Remit')
                 const yrData = await facebookApi('yehey_remit', id)
                 if (Object.keys(yrData)[0] === 'error') {
-                  return
+                  data = "problem"
                 } else {
                   props.loadingText('Loading Client')
                   data = yrData
